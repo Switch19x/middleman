@@ -1,0 +1,13 @@
+{
+  "name": "middleman-escrow",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Mobile-first escrow web app: contract, held payment, delivery, dispute resolution.",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "reset": "rm -f data/middleman.db data/middleman.db-*",
+    "test": "node --test --disable-warning=ExperimentalWarning test/*.test.js"
+  }
+}
