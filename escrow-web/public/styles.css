@@ -583,6 +583,8 @@ body.signed-out main { padding-bottom: 32px; }
 .login-hero h1 { font-size: 1.45rem; line-height: 1.35; }
 .or { display: flex; align-items: center; gap: 10px; color: var(--ink-3); font-size: .8rem; }
 .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.demo-warn { display: flex; gap: 10px; align-items: flex-start; margin: 0; padding: 12px 14px; border-radius: 12px; background: #FFF4E0; border: 1px solid #F2C77A; color: #6B4A12; font-size: 13px; line-height: 1.5; }
+.demo-warn svg { flex: none; width: 18px; height: 18px; margin-top: 1px; }
 .demo-box { border: 1.5px dashed #E5D3A8; box-shadow: none; }
 
 .ready.blocking { border: 1.5px solid #F6E3BC; }

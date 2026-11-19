@@ -60,6 +60,8 @@ function createApp({ db, bank, thaid, demo = true, publicDir }) {
   route('POST', '/api/auth/idcard', ({ body, res }) => login(res, A.registerWithIdCard(db, body).userId), { auth: false, limit: 'auth' });
   route('POST', '/api/auth/pin', ({ body, res }) => login(res, A.signInWithPin(db, body).userId), { auth: false, limit: 'auth' });
 
+  route('GET', '/api/health', () => ({ ok: true }), { auth: false });
+
   route('PUT', '/api/me/bank', ({ user, body }) => ({ user: A.setBankAccount(db, bank, user, body) }));
 
   // Staff queues
@@ -117,7 +119,8 @@ function createApp({ db, bank, thaid, demo = true, publicDir }) {
     const r = routes.find((x) => x.method === req.method && x.re.test(url.pathname));
     if (!r) return send(res, 404, { error: 'ไม่พบ API นี้' });
     if (req.method !== 'GET') {
-      if (!limiter(req.socket.remoteAddress) || (r.limit === 'auth' && !authLimiter(req.socket.remoteAddress))) return send(res, 429, { error: 'ทำรายการถี่เกินไป กรุณารอสักครู่' });
+      const ip = clientIp(req);
+      if (!limiter(ip) || (r.limit === 'auth' && !authLimiter(ip))) return send(res, 429, { error: 'ทำรายการถี่เกินไป กรุณารอสักครู่' });
       // CSRF: browsers cannot send a cross-site JSON POST without a preflight we never approve.
       if (!/^application\/json\b/.test(req.headers['content-type'] || '')) return send(res, 415, { error: 'ต้องส่งข้อมูลเป็น JSON' });
     }
@@ -182,6 +185,15 @@ function readBody(req) {
 function parseCookies(h = '') {
   return Object.fromEntries(h.split(';').map((p) => p.trim().split('=')).filter((p) => p[0]).map(([k, ...v]) => [k, decodeURIComponent(v.join('='))]));
 }
+// Behind a hosting proxy (TRUST_PROXY=1) every request comes from the proxy, so use the forwarded client address.
+function clientIp(req) {
+  if (process.env.TRUST_PROXY === '1') {
+    const fwd = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
+    if (fwd) return fwd;
+  }
+  return req.socket.remoteAddress;
+}
+
 function rateLimiter(max, windowMs) {
   const hits = new Map();
   return (key) => {

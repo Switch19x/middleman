@@ -919,6 +919,9 @@
   }
 
   // ----- sign in: national ID card only (ThaID, or card photo + PIN) -----
+  // Public demo: nobody should type a real ID number or upload a real card here.
+  const demoWarn = () => state.demo ? `<p class="demo-warn">${I.shield}<span><b>เว็บสาธิต</b> ข้อมูลทั้งหมดเป็นตัวอย่าง ห้ามกรอกเลขบัตรหรืออัปโหลดรูปบัตรประชาชนจริง และไม่มีการรับ-จ่ายเงินจริง</span></p>` : '';
+
   function viewLogin() {
     render(`<div class="stack-lg login">
       <section class="login-hero">
@@ -926,6 +929,7 @@
         <h1>ซื้อขายกับคนแปลกหน้า<br/>อย่างสบายใจ</h1>
         <p class="small muted">ทุกบัญชีบน Middleman ยืนยันตัวตนด้วยบัตรประชาชน 1 คนมีได้ 1 บัญชี</p>
       </section>
+      ${demoWarn()}
       <section class="stack">
         <button class="btn btn-primary btn-block btn-lg" data-action="thaid-start">${I.shield}เข้าสู่ระบบด้วย ThaID</button>
         <p class="tiny" style="text-align:center">ยืนยันตัวตนทันทีผ่านแอป ThaID ของกรมการปกครอง</p>
@@ -966,6 +970,7 @@
       <a class="back" href="#/login">${I.back}กลับ</a>
       <div class="stack" style="gap:6px"><h1>สมัครด้วยรูปบัตรประชาชน</h1>
         <p class="small muted">ทีมงานจะเทียบรูปบัตรกับรูปถ่ายของคุณ ระหว่างรอตรวจสอบจะยังทำรายการไม่ได้</p></div>
+      ${demoWarn()}
       <form class="stack-lg" data-form="idcard">
         <div class="field"><label for="i-pid">เลขประจำตัวประชาชน 13 หลัก</label>
           <input class="input num" id="i-pid" name="nationalId" inputmode="numeric" maxlength="17" autocomplete="off" required />

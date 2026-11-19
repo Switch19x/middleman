@@ -1,0 +1,23 @@
+# Render Blueprint: public demo of the Middleman escrow app (mock bank + mock ThaID).
+# Free plan: the disk is not persistent, so demo data is re-seeded on every restart.
+services:
+  - type: web
+    name: middleman-demo
+    runtime: node
+    plan: free
+    rootDir: escrow-web
+    buildCommand: node --version
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: NODE_ENV
+        value: production
+      - key: DEMO
+        value: "1"
+      - key: TRUST_PROXY
+        value: "1"
+      - key: ID_HASH_SECRET
+        generateValue: true

@@ -61,6 +61,15 @@ npm run reset    # delete the local database (re-seeds on next start)
 - Contracts are identified by a SHA-256 of their terms; signing requires the current hash.
 - Silent buyers: funds auto-release after the inspection window.
 
+## Online demo (Render)
+
+`render.yaml` at the repo root deploys this folder as a free Render web service:
+New → Blueprint → pick this GitHub repo → Apply. It runs Node 24 with `DEMO=1`,
+`TRUST_PROXY=1` (rate limits use the forwarded client IP) and a generated
+`ID_HASH_SECRET`. The free plan has no persistent disk and sleeps when idle, so
+demo data is re-seeded on each start. `GET /api/health` is the health check.
+The sign-in and sign-up pages warn visitors not to enter a real ID number or card photo.
+
 ## Not production-ready yet
 
 - **ThaID** is mocked. Production needs registration as a relying party with DOPA (กรมการปกครอง)
